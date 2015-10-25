@@ -1,17 +1,18 @@
-#Our unique graph is found at the bottom of this code with a description of it in the comments.
+#Our unique graphs are found at the bottom of this code with a description of it in the comments.The data we used looked at the way that Diseases affects different countries by looking at the number of deaths experienced per year (by any disease), and scaled it using a factor called death per 100,000, and looked at the age range of deaths. This data had a year range from 1970-2010 
 
 
 require(extrafont)
 
-#Graph 1: Fare vs Age w/ null included
+#Graph 1: Scatter plot of number of deaths vs deaths per 100,000. This graph showed that while number of deaths may increase (due to population increase), as the years went by and medicine became more effective the relative death rate per 100,000 actualy went down
+
 ggplot() + 
   coord_cartesian() + 
   scale_x_continuous() +
   scale_y_continuous() +
-  labs(title='How Disease Affects Number of Deaths Worldwide \n When Compared to Death Per 100,000 Statistics') +
-  labs(x="Num Deaths", y=paste("Death Rate Per 100,000")) +
+  labs(title='How Disease Affects Number of Deaths Worldwide \n When Compared to Death Per 100,000 Statistics from 1970 to 2010') +
+  labs(x="Number of Deaths", y=paste("Death Rate Per 100,000")) +
   layer(data=death_df, 
-        mapping=aes(x=as.numeric(as.character(NUMBER_OF_DEATHS)), y=as.numeric(as.character(DEATH_RATE_PER_100_000)), color=SEX), 
+        mapping=aes(x=as.numeric(as.character(NUMBER_OF_DEATHS)), y=as.numeric(as.character(DEATH_RATE_PER_100_000)), color=YEAR), 
         stat="identity", 
         stat_params=list(), 
         geom="point",
@@ -21,39 +22,40 @@ ggplot() +
 
 
 
-#Graph 2: Fare vs Age w/o null 
+#Graph 2: Crosstab that shows the Sum of the number of deaths, deaths per 100,000, and the Ratio of those two measures for Sex and Age Groups and Gives a KPI relating to the ratio.
+
 ggplot() + 
   coord_cartesian() + 
   scale_x_discrete() +
   scale_y_discrete() +
-  labs(title='Diamonds Crosstab\nSUM_PRICE, SUM_CARAT, SUM_PRICE / SUM_CARAT') +
-  labs(x=paste("COLOR"), y=paste("CLARITY")) +
-  layer(data=death_df, 
-        mapping=aes(x=AGE_GROUP, y=SEX, label=NUM_DEATHS), 
+  labs(title='Mortality of the World Population\n Number of Deaths(millions), Sum of Death Rate per 100,000 (millions),\n and Ratio Between the Number of Deaths and Death Rate') +
+  labs(x=paste("Age Group"), y=paste("Sex")) +
+  layer(data=KPI_df, 
+        mapping=aes(x=age_group, y=sex, label=round(SUM_DEATH,2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
         geom_params=list(colour="black"), 
         position=position_identity()
   ) +
-  layer(data=death_df, 
-        mapping=aes(x=AGE_GROUP, y=SEX, label=DEATH_RATE_PER_100_000), 
+  layer(data=KPI_df, 
+        mapping=aes(x=age_group, y=sex, label=round(SUM_100,2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
         geom_params=list(colour="black", vjust=2), 
         position=position_identity()
   ) +
-  layer(data=death_df, 
-        mapping=aes(x=AGE_GROUP, y=SEX, label=round(NUMBER_OF_DEATHS/DEATH_RATE_PER_100_000, 2)), 
+  layer(data=KPI_df, 
+        mapping=aes(x=age_group, y=sex, label=round(RATIO, 2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
         geom_params=list(colour="black", vjust=4), 
         position=position_identity()
   ) +
-  layer(data=death_df, 
-        mapping=aes(x=AGE_GROUP, y=SEX, fill=KPI), 
+  layer(data=KPI_df, 
+        mapping=aes(x=age_group, y=sex, fill=KPI), 
         stat="identity", 
         stat_params=list(), 
         geom="tile",
