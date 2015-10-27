@@ -1,20 +1,117 @@
 ---
-title: "TProject"
+title: "Project 4 Knit"
+author: "Nathan Riojas, Ryan Billa, Corey monreal-Jackson"
+date: "October 30, 2015"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+#### Steps used to create this project
+#####1. Using GitHub, create a Repo
+#####2. Clone the Repository into the Data Visualization Folder (Or the folder you wish)
+#####3. Create R Studio Folders for all the project development (folder descriptions below)
+#####4. Find several CSVs that are related to disease and country population.
+#####5. Modify the R_ETL.R given and run the code to get the code to develop a SQL table
+#####6. Using Oracle SQL Developer, paste the code output from the R_ETL.R script to create a table
+#####7. After the table is created, import the data from the CSV reformattted file to the table
+#####8. Use a query statement similar to the TitanicAnalysis.R file (used in the last project) to build a data frame with the CSV data from Oracle 
+#####9. Using Tableau we will create three different visuals and then the same visuals will be recreated with SQl and R
+#####10. Generate unique plots from the workflow dataframes
+#####11. Call these files in a .Rmd file using the R markdown command "source" and press Knit HTML to view the data/plots. (Code seen below) Note: Tables will also be generated to show the what the workflows created.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
+#### Folders Needed
+#####00 Doc: Holds the .Rmd and .html files containing these instructions and project output. Also holds RPROFILE to load all required packages.
+#####01 Data: Generates the code to create the table in Oracle. Gathers the data from the database for and puts it into data frames
+#####02 Tableau: Contains the .tdw file and .png files for the Visualizations
+#####03 R SQL Visualizations: Contains the .R files that use ggplot to generate our graphs
+
+
+#### R markdown code
+#####Immediately below is the code we adjusted from the R_ETL.R File. Its is directly pasted from the code because in the code it calls the csv so it cannot run if sourced.
+#####The .R file is called using the command directly after. The subsequent code/graphs illustrates the code that goes into
+
+
+```
+#setwd("C:/Users/Nathan R/Documents/DataVisualization/Project 4/01 Data/CSVs")
+
+#file_path <- "Effect of Disease Country Pop.csv"
+
+#df <- read.csv(file_path, stringsAsFactors = FALSE)
+
+##Replace "." (i.e., period) with "_" in the column names.
+#names(df) <- gsub("\\.+", "_", names(df))
+
+#str(df) # Uncomment this and  run just the lines to here to get column types to use for getting the list of measures.
+
+#measures <- c("Year","Number of Deaths", "Death Rate Per 100,000")
+##measures <- NA # Do this if there are no measures.
+
+##Get rid of special characters in each column.
+##Google ASCII Table to understand the following:
+#for(n in names(df)) {
+#  df[n] <- data.frame(lapply(df[n], gsub, pattern="[^ -~]",replacement= ""))
+#}
+
+#dimensions <- setdiff(names(df), measures)
+#if( length(measures) > 1 || ! is.na(dimensions)) {
+#  for(d in dimensions) {
+#    # Get rid of " and ' in dimensions.
+#    df[d] <- data.frame(lapply(df[d], gsub, pattern="[\"']",replacement= ""))
+#    # Change & to and in dimensions.
+#    df[d] <- data.frame(lapply(df[d], gsub, pattern="&",replacement= " and "))
+#    # Change : to ; in dimensions.
+#    df[d] <- data.frame(lapply(df[d], gsub, pattern=":",replacement= ";"))
+#  }
+#}
+#
+#library(lubridate)
+##Fix date columns, this needs to be done by hand because | needs to be correct.
+##                                                      \_/#
+#
+#
+##The following is an example of dealing with special cases like making state abbreviations be all upper case.
+##df["State"] <- data.frame(lapply(df["State"], toupper))
+#
+##Get rid of all characters in measures except for numbers, the - sign, and period.dimensions
+#if( length(measures) > 1 || ! is.na(measures)) {
+#  for(m in measures) {
+#    df[m] <- data.frame(lapply(df[m], gsub, pattern="[^--.0-9]",replacement= ""))
+#  }
+#}
+
+#write.csv(df, paste(gsub(".csv", "", file_path), ".reformatted.csv", sep=""), row.names=FALSE, na = "")
+
+#tableName <- gsub(" +", "_", gsub("[^A-z, 0-9, ]", "", gsub(".csv", "", file_path)))
+#sql <- paste("CREATE TABLE", tableName, "(\n-- Change table_name to the table name you want.\n")
+#if( length(measures) > 1 || ! is.na(dimensions)) {
+#  for(d in dimensions) {
+#    sql <- paste(sql, paste(d, "varchar2(4000),\n"))
+#  }
+#}
+#if( length(measures) > 1 || ! is.na(measures)) {
+#  for(m in measures) {
+#    if(m != tail(measures, n=1)) sql <- paste(sql, paste(m, "number(38,4),\n"))
+#    else sql <- paste(sql, paste(m, "number(38,4)\n"))
+#  }
+#}
+#sql <- paste(sql, ");")
+#cat(sql)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r warning = FALSE}
+source("../00 Doc/RPROFILE.R", echo = TRUE)
+source("../01 Data/Death_DataFrames.R", echo = TRUE)
+#source("../02 Tableau", echo = TRUE)
+source("../03 R SQL Visualizations/R SQL.R", echo = TRUE)
 ```{r}
-summary(cars)
-```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
