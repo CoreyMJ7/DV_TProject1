@@ -104,14 +104,9 @@ output: html_document
 
 
 
+![](../00 Doc/Bar Chart.png)
+![](../00 Doc/CrossTab.png)
+![](../00 Doc/Scatter Plot.png)
 
 
 
-
-
-```{r warning = FALSE}
-source("../00 Doc/RPROFILE.R", echo = TRUE)
-source("../01 Data/Death_DataFrames.R", echo = TRUE)
-#source("../02 Tableau", echo = TRUE)
-source("../03 R SQL Visualizations/R SQL.R", echo = TRUE)
-```{r}
