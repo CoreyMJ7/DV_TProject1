@@ -31,7 +31,7 @@ ggplot() +
   labs(title='Mortality of the World Population\n Number of Deaths(millions), Sum of Death Rate per 100,000 (millions),\n and Ratio Between the Number of Deaths and Death Rate') +
   labs(x=paste("Age Group"), y=paste("Sex")) +
   layer(data=KPI_df, 
-        mapping=aes(x=age_group, y=sex, label=round(SUM_DEATH,2)), 
+        mapping=aes(x=as.character(age_group), y=sex, label=round(SUM_DEATH,2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -39,7 +39,7 @@ ggplot() +
         position=position_identity()
   ) +
   layer(data=KPI_df, 
-        mapping=aes(x=age_group, y=sex, label=round(SUM_100,2)), 
+        mapping=aes(x=as.character(age_group), y=sex, label=round(SUM_100,2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -47,7 +47,7 @@ ggplot() +
         position=position_identity()
   ) +
   layer(data=KPI_df, 
-        mapping=aes(x=age_group, y=sex, label=round(RATIO, 2)), 
+        mapping=aes(x=as.character(age_group), y=sex, label=round(RATIO, 2)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -55,13 +55,16 @@ ggplot() +
         position=position_identity()
   ) +
   layer(data=KPI_df, 
-        mapping=aes(x=age_group, y=sex, fill=KPI), 
+        mapping=aes(x=as.character(age_group), y=sex, fill=KPI), 
         stat="identity", 
         stat_params=list(), 
         geom="tile",
         geom_params=list(alpha=0.50), 
         position=position_identity()
-  )
+  )+
+  x  = factor(x, levels=c("0-6 d", "7-27 d", "28-364 d","1-4", "5-9", "10-14","15-19", "20-24", "25-29","30-34", "40-44", "45-49","50-54", "55-59","60-64", "65-69", "70-74","75-79", "80+", "All ages"))
+
+
 
 
 
