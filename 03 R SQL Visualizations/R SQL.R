@@ -65,7 +65,58 @@ ggplot() +
   )+
   x  = factor(x, levels=c("0-6 d", "7-27 d", "28-364 d","1-4", "5-9", "10-14","15-19", "20-24", "25-29","30-34", "40-44", "45-49","50-54", "55-59","60-64", "65-69", "70-74","75-79", "80+", "All ages"))
 
+#Graph 3: Bar chart that compares country to death rate per 1000000 and the average difference associated
 
+df <- death_df %>% group_by(COUNTRY_NAME, SEX) %>% filter(COUNTRY_NAME %in% c("Afghanistan", "China", "Colombia", "Japan", "Korea, Republic of", "Pakistan", "Philippines", "Spain", "United Kingdom", "United States")) %>% filter(SEX %in% c("Female", "Male")) %>% summarize(AVG_DR = mean(DEATH_RATE_PER_100_000))
+df1 <- df %>% ungroup %>% group_by(SEX) %>% summarize(WINDOW_AVG_DR=mean(AVG_DR))
+df <- inner_join(df, df1, by="SEX") %>% arrange(COUNTRY_NAME)
+
+spread(df, COUNTRY_NAME, AVG_DR) %>% View
+
+ggplot() + 
+  coord_cartesian() + 
+  scale_x_discrete() +
+  scale_y_continuous() +
+  facet_wrap(~SEX, ncol=1) +
+  labs(title='Country vs Death Rate per 100000 ') +
+  labs(x=paste(""), y=paste("Avg. Death Rate per 100000")) +
+  layer(data=df, 
+        mapping=aes(x=COUNTRY_NAME, y=AVG_DR), 
+        stat="identity", 
+        stat_params=list(), 
+        geom="bar",
+        geom_params=list(colour="sky blue", fill="dark green"), 
+        position=position_identity()
+  ) + coord_flip() +
+  layer(data=df, 
+        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(AVG_DR)), 
+        stat="identity", 
+        stat_params=list(), 
+        geom="text",
+        geom_params=list(colour="black", hjust=-0.5), 
+        position=position_identity()
+  ) +
+  layer(data=df, 
+        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(WINDOW_AVG_DR)), 
+        stat="identity", 
+        stat_params=list(), 
+        geom="text",
+        geom_params=list(colour="black", hjust=-2), 
+        position=position_identity()
+  ) +
+  layer(data=df, 
+        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(AVG_DR - WINDOW_AVG_DR)), 
+        stat="identity", 
+        stat_params=list(), 
+        geom="text",
+        geom_params=list(colour="black", hjust=-5), 
+        position=position_identity()
+  ) +
+  layer(data=df, 
+        mapping=aes(yintercept = WINDOW_AVG_DR), 
+        geom="hline",
+        geom_params=list(colour="red")
+  ) 
 
 
 
