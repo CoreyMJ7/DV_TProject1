@@ -28,14 +28,3 @@ head(KPI_df)
 #Blended dataframes of death in relation to GDP for a given year
 new_death_df <- subset(death_df, select = c(COUNTRY_NAME, SEX, NUMBER_OF_DEATHS, DEATH_RATE_PER_100_000))
 dplyr::inner_join(new_death_df, gdp_df, by='COUNTRY_NAME') %>% filter(COUNTRY_NAME %in% c("Afghanistan", "China", "Colombia", "Japan", "Korea, Republic of", "Pakistan", "Philippines", "Spain", "United Kingdom", "United States")) %>% View
-
-
-
-
-
-
-
-
-
-
-
