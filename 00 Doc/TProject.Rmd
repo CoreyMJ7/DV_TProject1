@@ -1,7 +1,7 @@
 ---
-title: "Project 4 Knit"
+title: "Project 5 Knit"
 author: "Nathan Riojas, Ryan Billa, Corey Monreal-Jackson"
-date: "October 30, 2015"
+date: "November 13, 2015"
 output: html_document
 ---
 
@@ -13,10 +13,8 @@ output: html_document
 #####5. Modify the R_ETL.R given and run the code to get the code to develop a SQL table
 #####6. Using Oracle SQL Developer, paste the code output from the R_ETL.R script to create a table
 #####7. After the table is created, import the data from the CSV reformattted file to the table
-#####9. Using Tableau, create the three required visualization plots
-#####10. For bar charts, add the calculated difference from average and add a reference line for it. For the crosstab, calculate the KPI and color the table based on the cell's KPI value
-#####11. Export Tableau plots as png files into the repo for presenting
-#####12. Embed the pictures into the R Markdown file and press Knit HTML
+#####9. Using R and SQL, recreate the three required visualization plots that were made in tableau
+#####10. Blend the new data source using tableau and R and SQL. The .twbx will be placed in 02 Tableau
 
 #### Folders Needed
 #####00 Doc: Holds the .Rmd and .html files containing these instructions and project output. Also holds RPROFILE to load all required packages and has the png files.
