@@ -67,21 +67,22 @@ ggplot() +
 
 #Graph 3: Bar chart that compares country to death rate per 1000000 and the average difference associated
 
-df <- death_df %>% group_by(COUNTRY_NAME, SEX) %>% filter(COUNTRY_NAME %in% c("Afghanistan", "China", "Colombia", "Japan", "Korea, Republic of", "Pakistan", "Philippines", "Spain", "United Kingdom", "United States")) %>% filter(SEX %in% c("Female", "Male")) %>% summarize(AVG_DR = mean(DEATH_RATE_PER_100_000))
-df1 <- df %>% ungroup %>% group_by(SEX) %>% summarize(WINDOW_AVG_DR=mean(AVG_DR))
-df <- inner_join(df, df1, by="SEX") %>% arrange(COUNTRY_NAME)
 
-spread(df, COUNTRY_NAME, AVG_DR) %>% View
+df <- death_df %>% group_by(SEX, COUNTRY_NAME) %>% filter(COUNTRY_NAME %in% c("Afghanistan", "China", "Colombia", "Japan", "Korea, Republic of", "Pakistan", "Philippines", "Spain", "United Kingdom", "United States")) %>% filter(SEX %in% c("Female", "Male")) %>% summarize(AVG_DR = mean(DEATH_RATE_PER_100_000))
+df1 <- df %>% ungroup %>% group_by(COUNTRY_NAME) %>% summarize(WINDOW_AVG_DR=mean(AVG_DR))
+df <- inner_join(df, df1, by="COUNTRY_NAME") %>% arrange(COUNTRY_NAME)
+
+spread(df, SEX, AVG_DR) %>% View
 
 ggplot() + 
   coord_cartesian() + 
   scale_x_discrete() +
   scale_y_continuous() +
-  facet_wrap(~SEX, ncol=1) +
+  facet_wrap(~COUNTRY_NAME, ncol=1) +
   labs(title='Country vs Death Rate per 100000 ') +
   labs(x=paste(""), y=paste("Avg. Death Rate per 100000")) +
   layer(data=df, 
-        mapping=aes(x=COUNTRY_NAME, y=AVG_DR), 
+        mapping=aes(x=SEX, y=AVG_DR), 
         stat="identity", 
         stat_params=list(), 
         geom="bar",
@@ -89,7 +90,7 @@ ggplot() +
         position=position_identity()
   ) + coord_flip() +
   layer(data=df, 
-        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(AVG_DR)), 
+        mapping=aes(x=SEX, y=AVG_DR, label=round(AVG_DR)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -97,7 +98,7 @@ ggplot() +
         position=position_identity()
   ) +
   layer(data=df, 
-        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(WINDOW_AVG_DR)), 
+        mapping=aes(x=SEX, y=AVG_DR, label=round(WINDOW_AVG_DR)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -105,7 +106,7 @@ ggplot() +
         position=position_identity()
   ) +
   layer(data=df, 
-        mapping=aes(x=COUNTRY_NAME, y=AVG_DR, label=round(AVG_DR - WINDOW_AVG_DR)), 
+        mapping=aes(x=SEX, y=AVG_DR, label=round(AVG_DR - WINDOW_AVG_DR)), 
         stat="identity", 
         stat_params=list(), 
         geom="text",
@@ -116,96 +117,9 @@ ggplot() +
         mapping=aes(yintercept = WINDOW_AVG_DR), 
         geom="hline",
         geom_params=list(colour="red")
-  ) 
-
-
-
-#Graph 3: Fare vs Survived w/ As Character
-ggplot() + 
-  coord_cartesian() + 
-  scale_x_discrete() +
-  scale_y_continuous() +
-  #facet_wrap(~SURVIVED) +
-  #facet_grid(.~SURVIVED, labeller=label_both) + # Same as facet_wrap but with a label.
-  #facet_grid(PCLASS~SURVIVED, labeller=label_both) +
-  labs(title='Titanic') +
-  labs(x="SURVIVED", y=paste("Fare")) +
-  layer(data=df2, 
-        mapping=aes(x=SEX, y=as.numeric(as.character(FARE)), color=as.character(SURVIVED)), 
-        stat="identity", 
-        stat_params=list(), 
-        geom="point",
-        geom_params=list(), 
-        #position=position_identity()
-        position=position_jitter(width=0.3, height=0)
   )
 
 
-
-# Graph 4: Fare vs Survived w/Class Separation
-ggplot() + 
-  coord_cartesian() + 
-  scale_x_discrete() +
-  scale_y_continuous() +
-  facet_grid(PCLASS~SURVIVED, labeller=label_both) +
-  labs(title='Titanic') +
-  labs(x="SURVIVED", y=paste("FARE")) +
-  layer(data=df2, 
-        mapping=aes(x=SEX, y=as.numeric(as.character(FARE)), color=SEX), 
-        stat="identity", 
-        stat_params=list(), 
-        geom="point",
-        geom_params=list(), 
-        #position=position_identity()
-        position=position_jitter(width=0.3, height=0)
-  )
-
-
-
-
-
-#Graph 5: Fare vs Survived w/P class where age <= 10
-ggplot() + 
-  coord_cartesian() + 
-  scale_x_discrete() +
-  scale_y_continuous() +
-  #facet_wrap(~SURVIVED) +
-  #facet_grid(.~SURVIVED, labeller=label_both) + # Same as facet_wrap but with a label.
-  facet_grid(PCLASS~SURVIVED, labeller=label_both) +
-  labs(title='Titanic where age <= 10') +
-  labs(x="SURVIVED", y=paste("Fare")) +
-  layer(data=df3, 
-        mapping=aes(x=SEX, y=as.numeric(as.character(FARE)), color=SEX), 
-        stat="identity", 
-        stat_params=list(), 
-        geom="point",
-        geom_params=list(), 
-        #position=position_identity()
-        position=position_jitter(width=0.3, height=0)
-  )
-
-
-
-#Graph 6: Age vs Sex w/Embark and Survived - UNIQUE GROUP VISUALIZATION
-#Graphs the age vs sex of the passengers and separates this data by where the passenger embarked from and whether they survived
-ggplot() + 
-  coord_cartesian() + 
-  scale_x_discrete() +
-  scale_y_continuous() +
-  #facet_wrap(~SURVIVED) +
-  #facet_grid(.~SURVIVED, labeller=label_both) + # Same as facet_wrap but with a label.
-  facet_grid(SURVIVED~EMBARKED, labeller=label_both) +
-  labs(title='Titanic Age >= 40 vs Sex By Embarked Location & Survival') +
-  labs(x="SEX", y=paste("AGE")) +
-  layer(data=df4, 
-        mapping=aes(x=SEX, y=as.numeric(as.character(AGE)), color=SEX), 
-        stat="identity", 
-        stat_params=list(), 
-        geom="point",
-        geom_params=list(), 
-        #position=position_identity()
-        position=position_jitter(width=0.4, height=0)
-  )
 =======
   )
 # 

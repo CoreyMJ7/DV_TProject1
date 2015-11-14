@@ -9,11 +9,12 @@ summary(death_df)
 head(death_df)
 
 # Dataframe created from CSV table created in SQL
-gdp_df <- data.frame(fromJSON(getURL(URLencode('skipper.cs.utexas.edu:5001/rest/native/?query="select * from GDP_DATA"'),httpheader=c(DB='jdbc:oracle:thin:@sayonara.microlab.cs.utexas.edu:1521:orcl', USER='C##cs329e_nar784', PASS='orcl_nar784', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
+gdp_df <- data.frame(fromJSON(getURL(URLencode('skipper.cs.utexas.edu:5001/rest/native/?query="select * from GDP_DATA where COUNTRY_NUMBER < 2"'),httpheader=c(DB='jdbc:oracle:thin:@sayonara.microlab.cs.utexas.edu:1521:orcl', USER='C##cs329e_nar784', PASS='orcl_nar784', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE), ))
 
 
 summary(gdp_df)
 head(gdp_df)
+
 
 # Create the Crosstab dataframe
 KPI_Low_Max_value = .5 
@@ -23,6 +24,13 @@ KPI_df <- death_df %>% group_by(AGE_GROUP, SEX) %>% summarize(sum_death = sum(NU
 
 summary(KPI_df)
 head(KPI_df)
+
+#Blended dataframes of death in relation to GDP for a given year
+new_death_df <- subset(death_df, select = c(COUNTRY_NAME, SEX, NUMBER_OF_DEATHS, DEATH_RATE_PER_100_000))
+dplyr::inner_join(new_death_df, gdp_df, by='COUNTRY_NAME') %>% filter(COUNTRY_NAME %in% c("Afghanistan", "China", "Colombia", "Japan", "Korea, Republic of", "Pakistan", "Philippines", "Spain", "United Kingdom", "United States")) %>% View
+
+
+
 
 
 
