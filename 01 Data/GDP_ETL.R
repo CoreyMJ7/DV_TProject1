@@ -4,7 +4,7 @@ require(ggplot2)
 
 setwd("C:/Users/Nathan R/Documents/DataVisualization/Project 4/01 Data/CSVs")
 
-file_path <- "Country GDP.csv"
+file_path <- "GDP.csv"
 
 df <- read.csv(file_path, stringsAsFactors = FALSE)
 
@@ -13,7 +13,7 @@ names(df) <- gsub("\\.+", "_", names(df))
 
 # str(df) # Uncomment this and  run just the lines to here to get column types to use for getting the list of measures.
 
-measures <- c("2005", "2006", "2007", "2008", "2009", "2010" , "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020")
+measures <- c("Total GDP")
 #measures <- NA # Do this if there are no measures.
 
 # Get rid of special characters in each column.
