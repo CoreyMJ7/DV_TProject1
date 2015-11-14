@@ -287,8 +287,182 @@ img {
 </div>
 <div id="r-and-sql-code-and-visualizations" class="section level3">
 <h3>R and SQL Code And Visualizations:</h3>
-<pre class="r"><code>#source(&quot;../01 Data/Death_dataframes,R&quot;, echo = TRUE)
-#source(&quot;../03 R SQL Visualizations/R SQL.R&quot;, echo = TRUE)</code></pre>
+<pre class="r"><code>source(&quot;../00 doc/Rprofile.R&quot;, echo = TRUE)</code></pre>
+<pre><code>## 
+## &gt; require(&quot;ggplot2&quot;)</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## 
+## &gt; require(&quot;ggthemes&quot;)</code></pre>
+<pre><code>## Loading required package: ggthemes</code></pre>
+<pre><code>## 
+## &gt; require(&quot;gplots&quot;)</code></pre>
+<pre><code>## Loading required package: gplots
+## 
+## Attaching package: 'gplots'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     lowess</code></pre>
+<pre><code>## 
+## &gt; require(&quot;grid&quot;)</code></pre>
+<pre><code>## Loading required package: grid</code></pre>
+<pre><code>## 
+## &gt; require(&quot;RCurl&quot;)</code></pre>
+<pre><code>## Loading required package: RCurl
+## Loading required package: bitops</code></pre>
+<pre><code>## 
+## &gt; require(&quot;reshape2&quot;)</code></pre>
+<pre><code>## Loading required package: reshape2</code></pre>
+<pre><code>## 
+## &gt; require(&quot;tableplot&quot;)</code></pre>
+<pre><code>## Loading required package: tableplot</code></pre>
+<pre><code>## 
+## &gt; require(&quot;tidyr&quot;)</code></pre>
+<pre><code>## Loading required package: tidyr
+## 
+## Attaching package: 'tidyr'
+## 
+## The following object is masked from 'package:RCurl':
+## 
+##     complete</code></pre>
+<pre><code>## 
+## &gt; require(&quot;dplyr&quot;)</code></pre>
+<pre><code>## Loading required package: dplyr
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre><code>## 
+## &gt; require(&quot;jsonlite&quot;)</code></pre>
+<pre><code>## Loading required package: jsonlite
+## 
+## Attaching package: 'jsonlite'
+## 
+## The following object is masked from 'package:utils':
+## 
+##     View</code></pre>
+<pre><code>## 
+## &gt; require(&quot;extrafont&quot;)</code></pre>
+<pre><code>## Loading required package: extrafont
+## Registering fonts with R</code></pre>
+<pre><code>## 
+## &gt; require(&quot;lubridate&quot;)</code></pre>
+<pre><code>## Loading required package: lubridate</code></pre>
+<pre class="r"><code>source(&quot;../01 Data/Death_dataframes.R&quot;, echo = TRUE)</code></pre>
+<pre><code>## 
+## &gt; require(&quot;jsonlite&quot;)
+## 
+## &gt; require(&quot;RCurl&quot;)
+## 
+## &gt; require(&quot;ggplot2&quot;)
+## 
+## &gt; death_df &lt;- data.frame(fromJSON(getURL(URLencode(&quot;skipper.cs.utexas.edu:5001/rest/native/?query=\&quot;select * from DISEASE where NUMBER_OF_DEATHS &lt; 100 .... [TRUNCATED] 
+## 
+## &gt; summary(death_df)
+##   COUNTRY_CODE                COUNTRY_NAME      AGE_GROUP    
+##  ALB    :  315   Albania            :  315   y 10-14 : 2805  
+##  AND    :  315   Andorra            :  315   y 5-9   : 2801  
+##  ARE    :  315   Antigua and Barbuda:  315   y 15-19 : 2800  
+##  ARM    :  315   Armenia            :  315   y 20-24 : 2800  
+##  ATG    :  315   Australia          :  315   y 25-29 : 2800  
+##  AUS    :  315   Austria            :  315   y 30-34 : 2798  
+##  (Other):56161   (Other)            :56161   (Other) :41247  
+##      SEX             YEAR      NUMBER_OF_DEATHS DEATH_RATE_PER_100_000
+##  Both  :19226   Min.   :1970   Min.   :    0    Min.   :  105.1       
+##  Female:19425   1st Qu.:1980   1st Qu.:  161    1st Qu.:  784.6       
+##  Male  :19400   Median :1990   Median :  976    Median : 2528.0       
+##                 Mean   :1990   Mean   : 5955    Mean   :10026.2       
+##                 3rd Qu.:2000   3rd Qu.: 4107    3rd Qu.:10327.7       
+##                 Max.   :2010   Max.   :99994    Max.   :99966.0       
+##                                                                       
+## 
+## &gt; head(death_df)
+##   COUNTRY_CODE COUNTRY_NAME AGE_GROUP    SEX YEAR NUMBER_OF_DEATHS
+## 1          AFG  Afghanistan  y 20-24    Both 1990             4443
+## 2          AFG  Afghanistan  y 25-29    Male 1990             1910
+## 3          AFG  Afghanistan  y 25-29  Female 1990             2491
+## 4          AFG  Afghanistan  y 25-29    Both 1990             4401
+## 5          AFG  Afghanistan  y 30-34    Male 1990             1883
+## 6          AFG  Afghanistan  y 30-34  Female 1990             2449
+##   DEATH_RATE_PER_100_000
+## 1               5040.044
+## 2               4989.895
+## 3              27042.641
+## 4              11105.216
+## 5              10354.435
+## 6              80432.227
+## 
+## &gt; gdp_df &lt;- data.frame(fromJSON(getURL(URLencode(&quot;skipper.cs.utexas.edu:5001/rest/native/?query=\&quot;select * from GDP_DATA where COUNTRY_NUMBER &lt; 2\&quot;&quot;), .... [TRUNCATED] 
+## 
+## &gt; summary(gdp_df)
+##               COUNTRY_NAME COUNTRY_NUMBER   TOTAL_GDP        
+##  Afghanistan        :  1   Min.   :1      Min.   :8.000e+00  
+##  Albania            :  1   1st Qu.:1      1st Qu.:6.519e+03  
+##  Algeria            :  1   Median :1      Median :1.183e+05  
+##  Angola             :  1   Mean   :1      Mean   :2.080e+07  
+##  Antigua and Barbuda:  1   3rd Qu.:1      3rd Qu.:7.515e+05  
+##  Argentina          :  1   Max.   :1      Max.   :1.939e+09  
+##  (Other)            :183                                     
+## 
+## &gt; head(gdp_df)
+##             COUNTRY_NAME COUNTRY_NUMBER  TOTAL_GDP
+## 1                Belgium              1  94236.930
+## 2                 Belize              1    634.650
+## 3                  Benin              1 696376.500
+## 4                 Bhutan              1  13068.840
+## 5                Bolivia              1   9032.130
+## 6 Bosnia and Herzegovina              1   6235.005
+## 
+## &gt; KPI_Low_Max_value = 0.5
+## 
+## &gt; KPI_Medium_Max_value = 1
+## 
+## &gt; KPI_df &lt;- death_df %&gt;% group_by(AGE_GROUP, SEX) %&gt;% 
+## +     summarize(sum_death = sum(NUMBER_OF_DEATHS)/1e+06, sum_100 = sum(DEATH_RATE_PER_100_000)/ .... [TRUNCATED] 
+## 
+## &gt; summary(KPI_df)
+##      age_group      sex       SUM_DEATH         SUM_100       
+##  All ages : 3   Both  :21   Min.   : 1.035   Min.   : 0.2729  
+##  d 0-6    : 3   Female:21   1st Qu.: 2.521   1st Qu.: 3.9474  
+##  d 28-364 : 3   Male  :21   Median : 3.783   Median : 7.4317  
+##  d 7-27   : 3               Mean   : 5.487   Mean   : 9.2386  
+##  y 1-4    : 3               3rd Qu.: 6.349   3rd Qu.:13.6926  
+##  y 10-14  : 3               Max.   :27.405   Max.   :36.5324  
+##  (Other)  :45                                                 
+##      RATIO            KPI           
+##  Min.   :0.1036   Length:63         
+##  1st Qu.:0.2864   Class :character  
+##  Median :0.7351   Mode  :character  
+##  Mean   :1.2222                     
+##  3rd Qu.:1.6814                     
+##  Max.   :7.2131                     
+##                                     
+## 
+## &gt; head(KPI_df)
+## Source: local data frame [6 x 6]
+## 
+##   age_group    sex SUM_DEATH  SUM_100     RATIO     KPI
+##      (fctr) (fctr)     (dbl)    (dbl)     (dbl)   (chr)
+## 1  All ages   Both 27.404659 15.65569 1.7504595 01 High
+## 2  All ages Female 23.712542 18.95019 1.2513088 01 High
+## 3  All ages   Male 25.129415 14.71426 1.7078268 01 High
+## 4    d 0-6    Both  7.214035 34.04340 0.2119070  03 Low
+## 5    d 0-6  Female  3.782982 36.53240 0.1035514  03 Low
+## 6    d 0-6    Male  4.989569 32.48394 0.1536011  03 Low
+## 
+## &gt; new_death_df &lt;- subset(death_df, select = c(COUNTRY_NAME, 
+## +     SEX, NUMBER_OF_DEATHS, DEATH_RATE_PER_100_000))
+## 
+## &gt; dplyr::inner_join(new_death_df, gdp_df, by = &quot;COUNTRY_NAME&quot;) %&gt;% 
+## +     filter(COUNTRY_NAME %in% c(&quot;Afghanistan&quot;, &quot;China&quot;, &quot;Colombia&quot;, 
+## +         &quot;J ...&quot; ... [TRUNCATED]</code></pre>
+<pre class="r"><code>#source(&quot;../03 R SQL Visualizations/R SQL.R&quot;, echo = TRUE)</code></pre>
 </div>
 
 

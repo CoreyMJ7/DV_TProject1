@@ -195,7 +195,8 @@ output: html_document
 ### R and SQL Code And Visualizations:
 
 ```{r warning = FALSE}
-#source("../01 Data/Death_dataframes,R", echo = TRUE)
+source("../00 doc/Rprofile.R", echo = TRUE)
+source("../01 Data/Death_dataframes.R", echo = TRUE)
 #source("../03 R SQL Visualizations/R SQL.R", echo = TRUE)
 ```{r}
 
